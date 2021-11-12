@@ -28,3 +28,6 @@ jobs:
 
       - name: Publish image
         run: ${{ matrix.client }} push ${IMAGE,,}:${{ matrix.client }} # lowercase IMAGE
+
+      - name: Inspect image
+        run: ${{ matrix.client }} image inspect ${IMAGE,,}:${{ matrix.client }} # lowercase IMAGE
