@@ -3,26 +3,28 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE: ghcr.io/${{ github.repository }}:latest
+  IMAGE: ghcr.io/${{ github.repository }}
 
 jobs:
   publish:
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        client: [ 'podman', 'docker' ]
     steps:
       - uses: actions/checkout@v2
 
       - name: Create a Dockerfile
         run: |
           echo 'FROM alpine' > Dockerfile
-          echo 'LABEL org.opencontainers.image.description DESCRIPTION2' >> Dockerfile
+          echo 'LABEL org.opencontainers.image.description "An image created by ${{ matrix.client }}"' >> Dockerfile
           echo 'ENTRYPOINT ["echo", "Hello from ${{ github.repository }}!"]' >> Dockerfile
 
       - name: Build image
-        run: docker build . -t ${IMAGE,,} # lowercase IMAGE
+        run: ${{ matrix.client }} build . -t ${IMAGE,,}:${{ matrix.client }} # lowercase IMAGE
 
       - name: Login to ghcr.io
-        run: docker login https://ghcr.io -u token --password-stdin <<< ${{ secrets.GITHUB_TOKEN }}
+        run: ${{ matrix.client }} login ghcr.io -u token --password-stdin <<< ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish image
-        run: docker push ${IMAGE,,} # lowercase IMAGE
+        run: ${{ matrix.client }} push ${IMAGE,,}:${{ matrix.client }} # lowercase IMAGE
