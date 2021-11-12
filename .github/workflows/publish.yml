@@ -27,11 +27,7 @@ jobs:
         run: ${{ matrix.client }} login ghcr.io -u token --password-stdin <<< ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish image
-        run: |
-          ${{ matrix.client }} image save ${IMAGE,,}:${{ matrix.client }} > image.tar
-          docker image import image.tar ${IMAGE,,}:${{ matrix.client }}
-          docker login ghcr.io -u token --password-stdin <<< ${{ secrets.GITHUB_TOKEN }}
-          docker push ${IMAGE,,}:${{ matrix.client }}
+        run: ${{ matrix.client }} push ${IMAGE,,}:${{ matrix.client }}
 
       - name: Inspect image
         run: ${{ matrix.client }} image inspect ${IMAGE,,}:${{ matrix.client }} # lowercase IMAGE
