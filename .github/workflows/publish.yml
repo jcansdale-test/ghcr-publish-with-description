@@ -11,6 +11,11 @@ jobs:
     strategy:
       matrix:
         client: [ 'podman', 'docker' ]
+        include:
+          - options: ""
+          - client: 'podman'
+            options: "-f v2s2"
+          
     steps:
       - uses: actions/checkout@v2
 
@@ -27,7 +32,7 @@ jobs:
         run: ${{ matrix.client }} login ghcr.io -u token --password-stdin <<< ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish image
-        run: ${{ matrix.client }} push ${IMAGE,,}:${{ matrix.client }} -f v2s2
+        run: ${{ matrix.client }} push ${IMAGE,,}:${{ matrix.client }} ${{ matrix.options }}
 
       - name: Inspect image
         run: ${{ matrix.client }} image inspect ${IMAGE,,}:${{ matrix.client }} # lowercase IMAGE
