@@ -22,7 +22,7 @@ jobs:
       - name: Create a Dockerfile
         run: |
           echo 'FROM alpine' > Dockerfile
-          echo 'LABEL org.opencontainers.image.description "An image created by ${{ matrix.client }}"' >> Dockerfile
+          echo 'LABEL org.opencontainers.image.description "An pushed using ${{ matrix.client }} ${{ matrix.options }}"' >> Dockerfile
           echo 'ENTRYPOINT ["echo", "Hello from ${{ github.repository }}!"]' >> Dockerfile
 
       - name: Build image
