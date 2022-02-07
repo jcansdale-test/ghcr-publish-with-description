@@ -27,7 +27,7 @@ jobs:
         run: ${{ matrix.client }} login ghcr.io -u token --password-stdin <<< ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish image
-        run: ${{ matrix.client }} push ${IMAGE,,}:${{ matrix.client }}
+        run: ${{ matrix.client }} push ${IMAGE,,}:${{ matrix.client }} -f v2s2
 
       - name: Inspect image
         run: ${{ matrix.client }} image inspect ${IMAGE,,}:${{ matrix.client }} # lowercase IMAGE
