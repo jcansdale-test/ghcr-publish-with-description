@@ -12,9 +12,9 @@ jobs:
       matrix:
         client: [ 'podman', 'docker' ]
         include:
-          - options: ""
+          - options: ''
           - client: 'podman'
-            options: "-f v2s2"
+            options: '-f v2s2'
           
     steps:
       - uses: actions/checkout@v2
